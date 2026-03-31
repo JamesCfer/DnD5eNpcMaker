@@ -21,7 +21,7 @@
     "styles/builder.css"
   ],
   "templateDir": "templates",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "manifest": "https://github.com/JamesCfer/DnD5eNpcMaker/releases/download/latest/module.json",
   "download": "https://github.com/JamesCfer/DnD5eNpcMaker/releases/download/latest/DnD5eNpcMaker.zip"
 }
