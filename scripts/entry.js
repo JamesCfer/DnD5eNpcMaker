@@ -5,6 +5,7 @@
 import { openBuilder }          from './core/app.js';
 import { checkForModuleUpdate } from './core/update-check.js';
 import { registerSidebar }      from './core/sidebar.js';
+import { startHeartbeat }       from './core/heartbeat.js';
 import { Dnd5eNpcAdapter }      from './adapter.js';
 
 const adapter   = new Dnd5eNpcAdapter();
@@ -56,6 +57,8 @@ Hooks.once('ready', () => {
     `modules/${MODULE_ID}/templates/builder.html`,
   ]);
   console.log(`DnD 5e NPC Auto-Builder ready (version: ${currentVersion}).`);
+
+  startHeartbeat(MODULE_ID);
 
   if (game.user.isGM && !game.settings.get(MODULE_ID, 'welcomeMessageShown')) {
     const welcomeContent = `
