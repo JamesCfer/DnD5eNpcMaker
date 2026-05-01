@@ -161,7 +161,6 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
     const spellMapping = [];
     const spellPacks   = game.packs.filter(pack =>
       pack.documentName === 'Item' &&
-      pack.metadata.type === 'Item' &&
       (pack.metadata.id?.includes('spell') || pack.metadata.label?.toLowerCase().includes('spell'))
     );
     for (const pack of spellPacks) {

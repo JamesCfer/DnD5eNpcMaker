@@ -53,7 +53,7 @@ Hooks.once('ready', () => {
     try { localStorage.setItem(storedVersionKey, currentVersion); } catch (_) {}
   }
 
-  (foundry.applications.handlebars?.loadTemplates ?? loadTemplates)([
+  foundry.applications.handlebars.loadTemplates([
     `modules/${MODULE_ID}/templates/builder.html`,
   ]);
   console.log(`DnD 5e NPC Auto-Builder ready (version: ${currentVersion}).`);
