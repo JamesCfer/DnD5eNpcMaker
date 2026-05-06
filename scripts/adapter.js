@@ -1,5 +1,11 @@
 /**
  * D&D 5e NPC SystemAdapter — implements the BuilderApp contract for D&D 5e NPCs.
+ *
+ * @typedef {object} Dnd5eNpcFormData
+ * @property {string} name        Creature name.
+ * @property {number} level       Challenge Rating (1–30).
+ * @property {string} description Free-text description for the AI.
+ * @property {string} casterType  'none' | 'arcane' | 'divine' | 'primal'
  */
 
 import { SystemAdapter, postToN8n } from './core/adapter.js';
@@ -31,6 +37,7 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
 
   /* ── Form handling ──────────────────────────────────────── */
 
+  /** @returns {Dnd5eNpcFormData} */
   gatherFormData(form) {
     const fd = new FormData(form);
     const name        = (fd.get('name')?.toString()?.trim()) || 'Generated Creature';
@@ -66,6 +73,10 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
 
   /* ── Generation ─────────────────────────────────────────── */
 
+  /**
+   * @param {import('./core/adapter.js').GenerateOptions & { formData: Dnd5eNpcFormData }} opts
+   * @returns {Promise<import('./core/adapter.js').AdapterResult>}
+   */
   async generate({ formData, key, devMode }) {
     const endpoint = devUrl(NPC_ENDPOINT, devMode);
     const payload  = {
