@@ -157,6 +157,16 @@
 
         <div class="field">
           <label for="npc-desc">Description</label>
+          <select class="desc-template-select" aria-label="Load a description template">
+            <option value="">— Quick template… —</option>
+            <option value="A disciplined town guard on patrol: trained in spear and shield, wearing chain mail. Loyal to the lord's law. Calls for backup before engaging and defers to ranking officers.">Town guard</option>
+            <option value="A wiry bandit captain who commands a ruthless roadside crew. Dual-wields hand axes and fights dirty. Quick to intimidate, slow to trust, but honours deals once made.">Bandit captain</option>
+            <option value="A cunning merchant prince with fingers in every trade: bribery, smuggling, and honest business alike. Travels with hired muscle. Affable on the surface, calculating underneath.">Merchant</option>
+            <option value="A robed cult fanatic devoted to a dark entity. Uses mind-affecting spells and a sacrificial dagger. Utterly fearless in service to the cause; views death as an honour.">Cult fanatic</option>
+            <option value="An arcane scholar who has spent decades studying forbidden magic. Carries a staff of power and several scrolls. Brilliant, arrogant, and dangerously curious about the party.">Archmage</option>
+            <option value="A retired war veteran turned tavern keeper: tough, worldly, and still deadly in a brawl. Keeps a war hammer behind the bar. Gruff but protective of regulars.">Veteran innkeeper</option>
+            <option value="A cunning spy embedded in the city's power structure. Uses charm, disguise, and a poisoned shortbow. Serves the highest bidder; sells secrets like commodities.">Spy</option>
+          </select>
           <textarea id="npc-desc" name="description" rows="5"
             placeholder="Describe this creature: their role, attacks, special abilities, legendary actions, lore…"></textarea>
           <span class="field-hint">The more detail you provide, the better the AI can match your vision.</span>
@@ -199,6 +209,9 @@
       <div class="history-header">
         <i class="fa-solid fa-clock-rotate-left"></i>
         <span class="history-header-label">{{module.historyLabel}}</span>
+        <button type="button" class="history-compact-btn" title="Collapse history panel" aria-pressed="false" aria-label="Toggle compact history panel">
+          <i class="fa-solid fa-angles-right"></i>
+        </button>
         <button type="button" class="history-clear-btn" data-action="clearhistory" title="Clear all history entries">
           <i class="fa-solid fa-trash-can"></i>
         </button>
