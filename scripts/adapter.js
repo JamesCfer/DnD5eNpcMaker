@@ -8,7 +8,7 @@
  * @property {string} casterType  'none' | 'arcane' | 'divine' | 'primal'
  */
 
-import { SystemAdapter, postToN8n } from './core/adapter.js';
+import { SystemAdapter, postToN8n, ActorCreationError } from './core/adapter.js';
 import { N8N_BASE, devUrl }          from './core/n8n.js';
 import { detectModuleFolder }        from './core/utils.js';
 import { sanitizeActorDataDnd5e }    from './sanitizer.js';
@@ -131,8 +131,13 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
       console.warn('[NPC Builder] D&D 5e: schema merge failed (non-fatal):', mergeErr);
     }
 
-    const actor = await Actor.create(actorData);
-    if (!actor) throw new Error('Failed to create actor');
+    let actor;
+    try {
+      actor = await Actor.create(actorData);
+    } catch (error) {
+      throw new ActorCreationError(`Foundry rejected the actor: ${error.message}`, actorData);
+    }
+    if (!actor) throw new ActorCreationError('Actor creation returned null', actorData);
 
     await actor.update({
       'prototypeToken.name':        tokenName,
