@@ -77,13 +77,21 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
    * @param {import('./core/adapter.js').GenerateOptions & { formData: Dnd5eNpcFormData }} opts
    * @returns {Promise<import('./core/adapter.js').AdapterResult>}
    */
-  async generate({ formData, key, devMode }) {
+  quickEditFields(document) {
+    return [
+      { key: 'name',              label: 'Name',             value: document.name,                        type: 'text' },
+      { key: 'system.details.cr', label: 'Challenge Rating', value: document.system?.details?.cr ?? 1,    type: 'number', min: 0, max: 30, step: 0.125 },
+    ];
+  }
+
+  async generate({ formData, key, devMode, creativity = 0.5 }) {
     const endpoint = devUrl(NPC_ENDPOINT, devMode);
     const payload  = {
       name:        formData.name,
       cr:          formData.level,
       description: formData.description,
       casterType:  formData.casterType,
+      creativity,
     };
 
     if (formData.casterType !== 'none') {
