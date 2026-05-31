@@ -2,7 +2,7 @@
  * D&D 5e NPC Maker — module entry point.
  */
 
-import { openBuilder }          from './core/app.js';
+import { openBuilder, ensureBuilder } from './core/app.js';
 import { checkForModuleUpdate } from './core/update-check.js';
 import { registerSidebar }      from './core/sidebar.js';
 import { startHeartbeat }       from './core/heartbeat.js';
@@ -16,6 +16,8 @@ const openFn = () => {
   openBuilder(adapter);
   checkForModuleUpdate(MODULE_ID, adapter.module.githubUrl).catch(() => {});
 };
+
+adapter.registerSheetHooks(() => ensureBuilder(adapter));
 
 registerSidebar(MODULE_ID, openFn, {
   buttonLabel: 'NPC Builder',
