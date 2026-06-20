@@ -86,14 +86,13 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
     ];
   }
 
-  async generate({ formData, key, devMode, creativity = 0.5 }) {
+  async generate({ formData, key, devMode }) {
     const endpoint = devUrl(NPC_ENDPOINT, devMode);
     const payload  = {
       name:        formData.name,
       cr:          formData.level,
       description: formData.description,
       casterType:  formData.casterType,
-      creativity,
     };
 
     if (formData.casterType !== 'none') {
