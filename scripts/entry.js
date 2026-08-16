@@ -12,6 +12,38 @@ import { Dnd5eNpcAdapter }      from './adapter.js';
 const adapter   = new Dnd5eNpcAdapter();
 const MODULE_ID = adapter.module.id;
 
+// Cross-module bridge — lets sibling modules (e.g. the store generators)
+// open the NPC builder pre-filled and receive the created actor.
+Hooks.on('DnD5eNpcMaker.openWithPrefill', (payload = {}) => {
+  try {
+    const app = ensureBuilder(adapter);
+    app.render({ force: true });
+    const tryFill = (attemptsLeft) => {
+      const form = app.element?.querySelector?.('.npc-form');
+      if (!form) {
+        if (attemptsLeft > 0) setTimeout(() => tryFill(attemptsLeft - 1), 100);
+        return;
+      }
+      const set = (sel, val) => { const el = form.querySelector(sel); if (el != null && val != null) el.value = val; };
+      set('[name="name"]',        payload.name);
+      set('[name="level"]',       payload.level);
+      set('[name="description"]', payload.description);
+    };
+    tryFill(20);
+    if (typeof payload.onCreate === 'function') {
+      const handler = (actor) => {
+        try { payload.onCreate(actor); } catch (e) { console.error('[DnD5eNpcMaker] onCreate handler failed', e); }
+      };
+      // One-shot: fire on the next successful creation, then unregister.
+      const id = Hooks.on('createActor', (actor) => {
+        if (actor?.type === 'npc') { handler(actor); Hooks.off('createActor', id); }
+      });
+    }
+  } catch (err) {
+    console.error('[DnD5eNpcMaker] openWithPrefill failed', err);
+  }
+});
+
 const openFn = () => {
   openBuilder(adapter);
   checkForModuleUpdate(MODULE_ID, adapter.module.githubUrl).catch(() => {});
