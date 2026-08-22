@@ -9,6 +9,7 @@
  */
 
 import { SystemAdapter, postToN8n, ActorCreationError } from './core/adapter.js';
+import { injectSheetImageButton }     from './core/sheet-image-button.js';
 import { N8N_BASE, devUrl, isDevMode } from './core/n8n.js';
 import { detectModuleFolder,
          escapeHtml }                from './core/utils.js';
@@ -354,25 +355,12 @@ export class Dnd5eNpcAdapter extends SystemAdapter {
         crArea.parentNode.insertBefore(crBtn, crArea.nextSibling);
       }
 
-      const acArea =
-        root.querySelector('.ac') ||
-        root.querySelector('.armor-class') ||
-        root.querySelector('[data-field="system.attributes.ac.value"]')?.closest('.form-group') ||
-        root.querySelector('.sheet-header .stats');
-
-      if (acArea && acArea !== crArea) {
-        const imageBtn = document.createElement('button');
-        imageBtn.type = 'button';
-        imageBtn.className = 'npc-builder-sheet-image-btn';
-        imageBtn.innerHTML = '<i class="fa-solid fa-image"></i> Generate Image <span class="btn-cost-badge">4 uses</span>';
-        imageBtn.title = 'Generate an AI image for this creature (costs 4 NPC uses)';
-        imageBtn.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          ev.stopPropagation();
-          getApp()._generateImage(null, actor.toObject(), 'dnd5e');
-        });
-        acArea.parentNode.insertBefore(imageBtn, acArea);
-      }
+      injectSheetImageButton({
+        root,
+        doc:     actor,
+        title:   'Generate an AI image for this creature (costs 4 NPC uses)',
+        onClick: () => getApp()._generateImage(null, actor.toObject(), 'dnd5e'),
+      });
     };
 
     Hooks.on('renderActorSheet5e', inject);
